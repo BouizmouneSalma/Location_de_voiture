@@ -1,0 +1,404 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+:root {
+    --light: #f6f6f9;
+    --primary: #1976D2;
+    --light-primary: #CFE8FF;
+    --grey: #eee;
+    --dark-grey: #AAAAAA;
+    --dark: #363949;
+    --danger: #D32F2F;
+    --light-danger: #FECDD3;
+    --warning: #FBC02D;
+    --light-warning: #FFF2C6;
+    --success: #388E3C;
+    --light-success: #BBF7D0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.bx {
+    font-size: 1.7rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body.dark {
+    --light: #181a1e;
+    --grey: #25252c;
+    --dark: #fbfbfb
+}
+
+body {
+    background: var(--grey);
+    overflow-x: hidden;
+}
+
+.sidebar {
+    scrollbar-width: none;
+    transition: all 0.3s ease;
+    background: var(--light);
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar.close {
+    width: 60px;
+}
+
+.sidebar .logo .phlogo {
+    max-width: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar .side-menu li.active {
+    background: var(--grey);
+    position: relative;
+}
+
+.sidebar .side-menu li.active::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: -40px;
+    right: 0;
+    box-shadow: 20px 20px 0 var(--grey);
+    z-index: -1;
+}
+
+.sidebar .side-menu li.active::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    bottom: -40px;
+    right: 0;
+    box-shadow: 20px -20px 0 var(--grey);
+    z-index: -1;
+}
+
+.sidebar .logo .logoname span {
+    color: var(--dark);
+}
+
+.sidebar .side-menu li a {
+    width: 100%;
+    height: 100%;
+    background: var(--light);
+    display: flex;
+    align-items: center;
+    border-radius: 48px;
+    font-size: 16px;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow-x: hidden;
+    transition: all 0.3s ease;
+}
+
+.mainn .left h1 {
+    color: var(--dark);
+}
+
+.sidebar .side-menu li.active a {
+    color: var(--success);
+}
+
+.fa-car-side {
+    font-size: 35px;
+    margin-left: 10px;
+    z-index: 1000;
+}
+
+.sidebar.close .side-menu li a {
+    width: calc(53px - (4px * 2));
+    transition: all 0.3s ease;
+}
+
+.sidebar .side-menu li a .fa-solid,
+.bx {
+    min-width: calc(70px - ((4px + 6px) * 2));
+    display: flex;
+    font-size: 1.6rem;
+    justify-content: center;
+}
+
+.sidebar .side-menu li a.logout {
+    color: var(--danger);
+}
+
+.content {
+    position: relative;
+    width: calc(100% - 230px);
+    left: 230px;
+    transition: all 0.3s ease;
+}
+
+.sidebar.close~.content {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+.content nav {
+    height: 66px;
+    background: var(--light);
+    padding: 0 24px 0 0;
+    display: flex;
+    align-items: center;
+    grid-gap: 24px;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+.content nav::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: -40px;
+    left: 0;
+    border-radius: 50%;
+    box-shadow: -20px -20px 0 var(--light);
+}
+
+.content nav a {
+    color: var(--dark);
+}
+
+.content nav .bx.bx-menu {
+    cursor: pointer;
+    color: var(--dark);
+    font-size: 30px;
+}
+
+.content nav .theme-toggle {
+    display: block;
+    min-width: 50px;
+    height: 25px;
+    background: var(--grey);
+    cursor: pointer;
+    position: relative;
+    border-radius: 25px;
+}
+
+.content nav .theme-toggle::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    width: calc(25px - 4px);
+    background: var(--primary);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.content nav #theme-toggle:checked+.theme-toggle::before {
+    left: calc(100% - (25px - 4px) - 2px);
+}
+
+.content main .header .left .breadcrumb li a {
+    color: var(--dark-grey);
+    pointer-events: none;
+}
+
+.content main .header .left .breadcrumb li a.active {
+    color: var(--primary);
+    pointer-events: none;
+}
+
+.content main .insights li {
+    padding: 24px;
+    background: var(--light);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    grid-gap: 24px;
+    cursor: pointer;
+}
+
+.content main .insights li .fa-solid {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content main .insights li:nth-child(1) .fa-solid {
+    background: var(--light-primary);
+    color: var(--primary);
+}
+
+.content main .insights li:nth-child(2) .fa-solid {
+    background: var(--light-warning);
+    color: var(--warning);
+}
+
+.content main .insights li:nth-child(3) .fa-solid {
+    background: var(--light-success);
+    color: var(--success);
+}
+
+.content main .insights li .info h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.content main .insights li .info p {
+    color: var(--dark);
+}
+
+.content main .bottom-data {
+    color: var(--dark);
+}
+
+.content main .bottom-data>div {
+    border-radius: 20px;
+    background: var(--light);
+    padding: 24px 24px 0 24px;
+    overflow-x: auto;
+}
+
+.content main .bottom-data .header .bx {
+    cursor: pointer;
+}
+
+.content main .bottom-data .orders table tr td:last-child {
+    display: flex;
+    align-items: center;
+    grid-gap: 12px;
+    padding-left: 6px;
+} 
+
+.fa-trash {
+    color: #D32F2F;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.bx-edit-alt {
+    color: #00c375;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.fa-trash:hover,
+.bx-edit-alt:hover {
+    transform: scale(1.08);
+}
+
+.add-client-form {
+    background-color: var(--light);
+}
+
+.add-client-form h2 {
+    color: var(--dark);
+}
+
+.add-client-form .form-group label {
+    color: var(--dark-grey);
+}
+
+.add-client-form .form-group input {
+    border: 1px solid var(--grey);
+}
+
+.add-client-form .submit-btn {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
+.add-client-form .submit-btn:hover {
+    background-color: #0f59a3;
+    transform: scale(1.02);
+}
+
+.add-client-form .close-btn {
+    background-color: var(--danger);
+    color: var(--light);
+}
+
+.add-client-form .close-btn:hover {
+    background-color: #a82020;
+    transform: scale(1.02);
+}
+
+.add-client-form.active {
+    right: 0;
+}
+
+/*responsive*/
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .content {
+        width: calc(100% - 60px);
+        left: 200px;
+    }
+}
+@media screen and (max-width: 576px) {
+    .content nav form .form-input input {
+        display: none;
+    }
+    .content nav form .form-input button {
+        width: auto;
+        height: auto;
+        background: transparent;
+        color: var(--dark);
+        border-radius: none;
+    }
+    .content nav form.show .form-input input {
+        display: block;
+        width: 100%;
+    }
+    .content nav form.show .form-input button {
+        width: 36px;
+        height: 100%;
+        color: var(--light);
+        background: var(--danger);
+        border-radius: 0 36px 36px 0;
+    }
+    .content nav form.show~.notif,
+    .content nav form.show~.profile {
+        display: none;
+    }
+    .content main .insights {
+        grid-template-columns: 1fr;
+    }
+    .content main .bottom-data .header {
+        min-width: 340px;
+    }
+    .content main .bottom-data .orders table {
+        min-width: 340px;
+    }
+    .content main .bottom-data .reminders .task-list {
+        min-width: 340px;
+    }
+}
