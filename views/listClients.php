@@ -1,21 +1,14 @@
 <?php
- require_once './views/databasecnx.php';
- //for display data
- //Requets
-  $sqldata= $cnx->query('SELECT * FROM client');
-  //Get values
-  $client = $sqldata->fetch_all(MYSQLI_ASSOC);
-
-//   echo'<pre>';
-//   print_r($client);
-//   echo'</pre>';
-//   var_dump($client);
-if(isset($_GET['NumClientedit'])){
-
+ require_once '.././config/databasecnx.php';
+ require_once '.././Classes/Clients.php';
+ $db = new DatabaseConnection();
+$mysqli = $db->getConnection();
+$client = new Client($mysqli);
+// display data 
+$clients = $client->getAllClients();
+if(isset($_GET['NumClientedit'])){    
     $id = $_GET['NumClientedit'];
-    $edit = "SELECT * FROM `client` WHERE NumClient = $id";
-    $result = mysqli_query($cnx, $edit);
-    $val = mysqli_fetch_assoc($result);
+    $val= $client->getClientById($id);
     if(isset($val)) {
         echo "<script>
             console.log(document.getElementById('editform'));
@@ -26,23 +19,23 @@ if(isset($_GET['NumClientedit'])){
     } 
 }
 
-//delet
-if(isset($_GET['NumClient'])){
-   $NumClient = $_GET['NumClient'];
-$delet = $cnx->prepare('DELETE FROM client WHERE NumClient=?');
-$delet->execute([$NumClient]); 
-header('Location: clients.php');
-}
+// //delet
+// if(isset($_GET['NumClient'])){
+//    $NumClient = $_GET['NumClient'];
+// $delet = $cnx->prepare('DELETE FROM client WHERE NumClient=?');
+// $delet->execute([$NumClient]); 
+// header('Location: clients.php');
+// }
 
 
-    // clacul somme client i have 
-    $stmt = $cnx->query("SELECT COUNT(*) AS total_clients FROM client");
-    $result = $stmt->fetch_assoc();
-    $stmtv = $cnx->query("SELECT COUNT(*) AS total_voitures FROM voiture");
-    $resultv = $stmtv->fetch_assoc();
-    $stmtc = $cnx->query("SELECT COUNT(*) AS total_contrats FROM contrat");
-    $resultc = $stmtc->fetch_assoc();
-    //get data
+//     // clacul somme client i have 
+//     $stmt = $cnx->query("SELECT COUNT(*) AS total_clients FROM client");
+//     $result = $stmt->fetch_assoc();
+//     $stmtv = $cnx->query("SELECT COUNT(*) AS total_voitures FROM voiture");
+//     $resultv = $stmtv->fetch_assoc();
+//     $stmtc = $cnx->query("SELECT COUNT(*) AS total_contrats FROM contrat");
+//     $resultc = $stmtc->fetch_assoc();
+//     //get data
    
    
 
@@ -57,8 +50,8 @@ header('Location: clients.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
-    <script src="/tailwind.js"></script>
+    <link rel="stylesheet" href=".././assets/style.css">
+    <script src=".././assets/tailwind.js"></script>
 </head>
 
 <body class="">
@@ -69,14 +62,14 @@ header('Location: clients.php');
         <div class="logoname ml-2"><span>Loca</span>Auto</div>
     </a>
     <ul class="side-menu w-full mt-12">
-            <li class="active h-12 bg-transparent ml-2.5 rounded-l-full p-1"><a href="/clients.php"><i class="fa-solid fa-user-group"></i>Clients</a></li>
-            <li class="h-12 bg-transparent ml-2.5 rounded-l-full p-1"><a href="/cars.php"><i class="fa-solid fa-car"></i>Cars</a></li>
-            <li class="h-12 bg-transparent ml-1.5 rounded-l-full p-1"><a href="/contrats.php"><i class="fa-solid fa-file-contract"></i></i>Contrats</a></li>
-            <li class="h-12 bg-transparent ml-1.5 rounded-l-full p-1"><a href="/statistic.php"><i class="fa-solid fa-chart-simple"></i>Statistic</a></li>
+            <li class="active h-12 bg-transparent ml-2.5 rounded-l-full p-1"><a href="listClients.php"><i class="fa-solid fa-user-group"></i>Clients</a></li>
+            <li class=" h-12 bg-transparent ml-2.5 rounded-l-full p-1"><a href="listCars.php"><i class="fa-solid fa-car"></i>Cars</a></li>
+            <li class=" h-12 bg-transparent ml-1.5 rounded-l-full p-1"><a href="listContrat.php"><i class="fa-solid fa-file-contract"></i></i>Contrats</a></li>
+            <li class=" h-12 bg-transparent ml-1.5 rounded-l-full p-1"><a href="statistic.php"><i class="fa-solid fa-chart-simple"></i>Statistic</a></li>
     </ul>
     <ul class="side-menu w-full mt-12">
             <li class="h-12 bg-transparent ml-2.5 rounded-l-full p-1">
-                <a href="#" class="logout">
+                <a href="../index.php" class="logout">
                     <i class='bx bx-log-out-circle'></i> Logout
                 </a>
             </li>
@@ -101,7 +94,7 @@ header('Location: clients.php');
                 <span class="count absolute top-[-6px] right-[-6px] w-[20px] h-[20px] bg-[#D32F2F] text-[#f6f6f6] border-2 border-[#f6f6f9] font-semibold text-[12px] flex items-center justify-center rounded-full ">12</span>
             </a>
             <a href="#" class="profile">
-                <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src="/image/1054-1728555216-removebg-preview.png">
+                <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src=".././assets/image/1054-1728555216-removebg-preview.png">
             </a>
     </nav>
 
@@ -109,14 +102,14 @@ header('Location: clients.php');
  <main class=" mainn w-full p-[36px_24px] max-h-[calc(100vh_-_56px)]" >
  <div  class="header flex items-center justify-between gap-[16px] flex-wrap">
  <div class="left">
-     <ul class="breadcrumb flex items-center space-x-[16px]">
-        <li class="text-[#363949]" ><a href="#" class="active">
+ <ul class="breadcrumb flex items-center space-x-[16px]">
+        <li class="text-[#363949]" ><a href="listClients.php" class="active">
          Client &npr;
            </a></li>
          /
-        <li class="text-[#363949]"><a href="#" >Cars &npr;</a></li> /
-        <li class="text-[#363949]"><a href="#" >Contrats &npr;</a></li> /
-        <li class="text-[#363949]"><a href="#" >Statistic &npr;</a></li>
+        <li class="text-[#363949]"><a href="listCars.php"  >Cars &npr;</a></li> /
+        <li class="text-[#363949]"><a href="listContrat.php"  >Contrats &npr;</a></li> /
+        <li class="text-[#363949]"><a href="statistic.php" >Statistic &npr;</a></li>
 
      </ul>
 </div>
@@ -132,7 +125,7 @@ header('Location: clients.php');
                     <span class="info">
                         <h3>
                             <?php
-                            echo $result['total_clients'];
+                            // echo $result['total_clients'];
                             ?>
                         </h3>
                         <p>Clients</p>
@@ -142,7 +135,7 @@ header('Location: clients.php');
                     <span class="info">
                         <h3>
                         <?php
-                            echo $resultv['total_voitures'];
+                            // echo $resultv['total_voitures'];
                             ?>
                         </h3>
                         <p>Cars</p>
@@ -152,7 +145,7 @@ header('Location: clients.php');
                     <span class="info">
                         <h3>
                         <?php
-                            echo $resultc['total_contrats'];
+                            // echo $resultc['total_contrats'];
                         ?>
                         </h3>
                         <p>Contrats</p>
@@ -181,7 +174,7 @@ header('Location: clients.php');
                         </thead>
                         <tbody>
                            <?php
-                           foreach($client as $row){
+                           foreach($clients as $row){
                             ?>
                              <tr>
                                 <td class="py-4 px-3">
@@ -191,7 +184,7 @@ header('Location: clients.php');
                                 <td class="py-4 px-3">  <?php echo $row['Tele'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $row['Adresse'] ?></td>
                                 <td class="py-4 px-3 edit-button" > 
-                                <a href="clients.php?NumClientedit=<?php echo $row['NumClient']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
+                                <a href="listClients.php?NumClientedit=<?php echo $row['NumClient']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
                                 <a href="clients.php?NumClient= <?php echo $row['NumClient'] ?>"><i class="fa-solid fa-trash"></i></a></td>
                             </tr>
                             <?php
@@ -207,7 +200,7 @@ header('Location: clients.php');
 </div>
 
 <div id="addClientForm" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[450px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
-        <form action="./views/ajoutclient.php" method="post"  class="flex flex-col gap-4">
+        <form action=".././controllers/controlClient.php" method="post"  class="flex flex-col gap-4">
             <h2 class="text-2xl font-semibold  mb-5">Add Client</h2>
             <div class="form-group flex flex-col">
                 <label for="firstName" class="text-sm text-gray-700 mb-1">Complet Name</label>
@@ -247,7 +240,7 @@ header('Location: clients.php');
 </div> 
 
  
- <script src="/main.js"></script>
+ <script src=".././assets/main.js"></script>
 </body>
 
 </html>
