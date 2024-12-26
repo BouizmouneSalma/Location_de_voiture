@@ -23,9 +23,16 @@ class Client {
     // get client by id
     public function getClientById($id) {
         $stmt = $this->cnx->prepare("SELECT * FROM client WHERE NumClient = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch_all(MYSQLI_ASSOC);
+        $stmt->bind_param("i", $id); // ربط المتغير مع الاستعلام
+    
+        if ($stmt->execute()) {
+            $stmt_result = $stmt->get_result(); // الحصول على النتيجة كـ mysqli_result
+            $reslt = $stmt_result->fetch_all(MYSQLI_ASSOC); // استعمال fetch_all للحصول على جميع الصفوف
+        } 
+        return $reslt;
+       
     }
+    
 
     // get all client 
     public function getAllClients() {

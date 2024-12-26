@@ -6,6 +6,7 @@ $mysqli = $db->getConnection();
 $client = new Client($mysqli);
 // display data 
 $clients = $client->getAllClients();
+
 if(isset($_GET['NumClientedit'])){    
     $id = $_GET['NumClientedit'];
     $val= $client->getClientById($id);
@@ -18,16 +19,6 @@ if(isset($_GET['NumClientedit'])){
               </script>";
     } 
 }
-
-// //delet
-// if(isset($_GET['NumClient'])){
-//    $NumClient = $_GET['NumClient'];
-// $delet = $cnx->prepare('DELETE FROM client WHERE NumClient=?');
-// $delet->execute([$NumClient]); 
-// header('Location: clients.php');
-// }
-
-
 //     // clacul somme client i have 
 //     $stmt = $cnx->query("SELECT COUNT(*) AS total_clients FROM client");
 //     $result = $stmt->fetch_assoc();
@@ -185,7 +176,7 @@ if(isset($_GET['NumClientedit'])){
                                 <td class="py-4 px-3">  <?php echo $row['Adresse'] ?></td>
                                 <td class="py-4 px-3 edit-button" > 
                                 <a href="listClients.php?NumClientedit=<?php echo $row['NumClient']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
-                                <a href="clients.php?NumClient= <?php echo $row['NumClient'] ?>"><i class="fa-solid fa-trash"></i></a></td>
+                                <a href=".././controllers/controlClient.php?NumClient= <?php echo $row['NumClient'] ?>"><i class="fa-solid fa-trash"></i></a></td>
                             </tr>
                             <?php
                            }
@@ -220,19 +211,19 @@ if(isset($_GET['NumClientedit'])){
 </div>
 
 <div id="editform" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[450px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
-        <form action="./views/modify.php?NumClientedit=<?php echo $val['NumClient'] ?>" method="post" class="flex flex-col gap-4">
+        <form action=".././controllers/controlClient.php?NumClientedit=<?php echo $val[0]['NumClient'] ?>" method="post" class="flex flex-col gap-4">
        <h2 class="text-2xl font-semibold  mb-5">Update Client</h2>
             <div class="form-group flex flex-col">
                 <label for="firstName" class="text-sm text-gray-700 mb-1">New Complet Name</label>
-                <input name="namecomplet" type="text"  id="firstName" placeholder="Enter Complet Name" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val['Nom'])) echo $val['Nom']?>">
+                <input name="namecomplet" type="text"  id="firstName" placeholder="Enter Complet Name" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Nom'])) echo $val[0]['Nom']?>">
             </div>
             <div class="form-group flex flex-col">
                 <label for="phone" class="text-sm text-gray-700 mb-1">New Phone</label>
-                <input name="phone" type="text" id="phone" placeholder="Enter Phone" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val['Tele'])) echo $val['Tele']?>">
+                <input name="phone" type="text" id="phone" placeholder="Enter Phone" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Tele'])) echo $val[0]['Tele']?>">
             </div>
             <div class="form-group flex flex-col">
                 <label for="address" class="text-sm text-gray-700 mb-1">New Address</label>
-                <input name="email" type="text" id="address" placeholder="Enter Address" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val['Adresse'])) echo $val['Adresse']?>">
+                <input name="email" type="text" id="address" placeholder="Enter Address" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Adresse'])) echo $val[0]['Adresse']?>">
             </div>
             <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="edit">Edit</button>
             <button type="button" id="colseedit" class="close-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out">Close</button>
