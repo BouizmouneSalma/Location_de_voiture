@@ -3,7 +3,7 @@
 class DatabaseConnection {
     private $host = "localhost";
     private $username = "root";
-    private $password = "1234";
+    private $password = "Mahjoub@123";
     private $database = "location_voiture";
     private $connection;
 
@@ -33,9 +33,6 @@ class DatabaseConnection {
     }
 }
 
-$db = new DatabaseConnection();
-$conn = $db->getConnection(); 
 
-$db->closeConnection();
 
 ?>
