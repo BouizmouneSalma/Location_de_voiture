@@ -42,15 +42,21 @@ if(isset($_POST['Add'])){
 }
 
 //updat client
-// if(isset($_POST['edit'])){
-//     $id = $_GET['NumClientedit'];
-//     $nomcmpl = $_POST['namecomplet'];
-//     $phone = $_POST['phone'];
-//     $email = $_POST['email'];
-//     $updt = "UPDATE `client` SET Nom='$nomcmpl', Adresse='$email', Tele='$phone' WHERE NumClient=$id";
-//      $reslt = mysqli_query($cnx,$updt);
-    
-// header('Location: ../clients.php');
-// }
+if(isset($_POST['edit'])){
+    $id = $_GET['NumClientedit'];
+    $nomcmpl = $_POST['namecomplet'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $reslt = $client->updateClient( $id,$nomcmpl, $phone,$email);
+
+    header('Location: .././views/listClients.php');
+}
+
+//delet client
+if(isset($_GET['NumClient'])){
+$NumClient = $_GET['NumClient'];
+$reslt = $client->deleteClient( $NumClient );
+header('Location: .././views/listClients.php');
+}
 
 ?>
