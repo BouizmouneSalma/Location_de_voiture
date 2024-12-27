@@ -1,53 +1,27 @@
-
 <?php
-//  require_once './views/databasecnx.php';
-//  //for display data
-//  //Requets
-//   $sqldata= $cnx->query('SELECT * FROM voiture');
-//   //Get values
-//   $voiture = $sqldata;
-  
+ require_once '.././config/databasecnx.php';
+ require_once '.././Classes/car.php';
+ $db = new DatabaseConnection();
+$mysqli = $db->getConnection();
+$voiture = new Car($mysqli);
+// display data 
 
-// //   echo'<pre>';
-// //   print_r($client);
-// //   echo'</pre>';
-// //   var_dump($client);
-// //For Display Data in Form Update
-// if(isset($_GET['NumCaredit'])){
-//     $id = $_GET['NumCaredit'];
-//     $edit = "SELECT * FROM `voiture` WHERE NumImmatriculation= '$id'";
-//     $result = mysqli_query($cnx, $edit);
-//      $valcar = mysqli_fetch_assoc($result);
-//     if(isset($valcar)) {                                            
-//         echo "<script>
-//             document.addEventListener('DOMContentLoaded', () => {
-//                 document.getElementById('editformcar').classList.add('active');
-//             })
-//             </script>";
-//      }
-// }
-// //delet
-// if(isset($_GET['NumCar'])){
-//    $NumCar = $_GET['NumCar'];
-// $delet = $cnx->prepare("DELETE FROM voiture WHERE NumImmatriculation=? ");
-// $delet->execute([$NumCar]); 
-// header('Location: cars.php');
-// }
+$voitures = $voiture->getAllCars();
 
-
-//     // clacul somme client i have 
-//      $stmt = $cnx->query("SELECT COUNT(*) AS total_clients FROM client");
-//      $result = $stmt->fetch_assoc();
-//      $stmtv = $cnx->query("SELECT COUNT(*) AS total_voitures FROM voiture");
-//      $resultv = $stmtv->fetch_assoc();
-//      $stmtc = $cnx->query("SELECT COUNT(*) AS total_contrats FROM contrat");
-//      $resultc = $stmtc->fetch_assoc();
-//     //get data
-   
-   
-
-
+if(isset($_GET['NumEdit'])){    
+    $id = $_GET['NumEdit'];
+    $val= $voiture->getCarById($id);
+    if(isset($val)) {
+        echo "<script>
+            console.log(document.getElementById('editform'));
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('editform').classList.add('active');
+               })
+              </script>";
+    } 
+}
  ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,7 +108,7 @@
                     <span class="info">
                         <h3>
                             <?php
-                            echo $result['total_clients'];
+                            // echo $result['total_clients'];
                             ?>
                         </h3>
                         <p>Clients</p>
@@ -144,7 +118,7 @@
                     <span class="info">
                         <h3>
                         <?php
-                            echo $resultv['total_voitures'];
+                            // echo $resultv['total_voitures'];
                             ?>
                         </h3>
                         <p>Cars</p>
@@ -154,7 +128,7 @@
                     <span class="info">
                         <h3>
                         <?php
-                            echo $resultc['total_contrats'];
+                            // echo $resultc['total_contrats'];
                         ?>
                         </h3>
                         <p>Contrats</p>
@@ -183,7 +157,7 @@
                         </thead>
                         <tbody>
                            <?php
-                           foreach($voiture as $voit){
+                           foreach($voitures as $voit){
                             ?>
                              <tr>
                                 <td class="py-4 px-3">
@@ -193,8 +167,8 @@
                                 <td class="py-4 px-3">  <?php echo $voit['Modele'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $voit['Annee'] ?></td>
                                 <td class="py-4 px-3 edit-button" > 
-                                <a href="cars.php?NumCaredit=<?php echo $voit['NumImmatriculation']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
-                                <a href="cars.php?NumCar=<?php echo $voit['NumImmatriculation']; ?>"><i class="fa-solid fa-trash"></i></a></td>
+                                <a href="listCars.php?NumEdit=<?php echo $voit['NumImmatriculation']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
+                                <a href=".././controllers/controlCar.php?NumImmatriculation=<?php echo $voit['NumImmatriculation'] ?>"><i class="fa-solid fa-trash"></i></a></td>
                             </tr>
                             <?php
                            }
@@ -204,12 +178,10 @@
  </div>
  </div>
  </main>
-
- 
 </div>
 
 <div id="addClientForm" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[520px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
-        <form action="./views/ajoutCar.php" method="post"  class="flex flex-col gap-4">
+        <form action=".././controllers/controlCar.php" method="post"  class="flex flex-col gap-4">
             <h2 class="text-2xl font-semibold  mb-5">Add Car</h2>
             <div class="form-group flex flex-col">
                 <label for="nummatrucle" class="text-sm text-gray-700 mb-1">Registration number </label>
@@ -225,31 +197,35 @@
             </div>
             <div class="form-group flex flex-col">
                 <label for="year" class="text-sm text-gray-700 mb-1">Year</label>
-                <input  type="number"   id="vehicleYear"   name="vehYear"   min="2008"  max="2024"   required  placeholder="Enter the vehicle year" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" >
+                <input  type="number"   id="vehicleYear"   name="1"   min="2008"  max="2024"   required  placeholder="Enter the vehicle year" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" >
             </div>
-            <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="Addveh" >Add</button>
+            <div class="form-group flex flex-col">
+        <label for="carImage" class="text-sm text-gray-700 mb-1">Car Image</label>
+        <input type="file" name="carImage" id="carImage" accept="image/*" class="p-2 border border-gray-300 rounded-lg outline-none text-sm">
+    </div>
+            <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="Add" >Add</button>
             <button type="button" id="closeForm" class="close-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out">Close</button>
       </form>
 </div>
 
-<div id="editformcar" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[520px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
-        <form action="./views/modifycar.php?Numcar=<?php echo $valcar['NumImmatriculation'] ?>" method="post" class="flex flex-col gap-4">
-       <h2 class="text-2xl font-semibold  mb-5">Update Car</h2>
+<div id="editform" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[520px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
+<form action=".././controllers/controlCar.php?Numedit=<?php echo $val[0]['NumImmatriculation'] ?>" method="post"  class="flex flex-col gap-4">
+<h2 class="text-2xl font-semibold  mb-5">Update Car</h2>
             <div class="form-group flex flex-col">
-                <label for="nummatrucle" class="text-sm text-gray-700 mb-1">New Registration number</label>
-                <input name="NumMatricle" type="text"  id="nummatrucle" placeholder="Enter the vehicle Sirie" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($valcar['NumImmatriculation'])) echo $valcar['NumImmatriculation']?>">
+                <label for="nummatrucle" class="text-sm text-gray-700  mb-1">New Registration number</label>
+                <input name="NumMatricle" type="text"  id="nummatrucle" placeholder="Enter the vehicle Sirie" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['NumImmatriculation'])) echo $val[0]['NumImmatriculation']?>">
             </div>
             <div class="form-group flex flex-col">
                 <label for="marque" class="text-sm text-gray-700 mb-1">New Mark</label>
-                <input name="Mark" type="text" id="marque" placeholder="Enter the vehicle Mark" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($valcar['Marque'])) echo $valcar['Marque']?>">
+                <input name="Mark" type="text" id="marque" placeholder="Enter the vehicle Mark" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Marque'])) echo $val[0]['Marque']?>">
             </div>
             <div class="form-group flex flex-col">
                 <label for="Model" class="text-sm text-gray-700 mb-1">New Model</label>
-                <input name="Model" type="text" id="Model" placeholder="Enter the vehicle Model" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($valcar['Modele'])) echo $valcar['Modele']?>">
+                <input name="Model" type="text" id="Model" placeholder="Enter the vehicle Model" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Modele'])) echo $val[0]['Modele']?>">
             </div>
            <div class="form-group flex flex-col">
                 <label for="year" class="text-sm text-gray-700 mb-1">New Year</label>
-                <input  type="number"   id="vehicleYear"   name="vehYear"   min="2008"  max="2024"   required  placeholder="Enter the vehicle year" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($valcar['Annee'])) echo $valcar['Annee']?>">
+                <input  type="number"   id="vehicleYear"   name="vehYear"   min="2008"  max="2024"   required  placeholder="Enter the vehicle year" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Annee'])) echo $val[0]['Annee']?>">
             </div>
             <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="editveh">Edit</button>
             <button type="button" id="colseedit" class="close-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out">Close</button>

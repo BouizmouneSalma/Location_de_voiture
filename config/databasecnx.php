@@ -3,7 +3,7 @@
 class DatabaseConnection {
     private $host = "localhost";
     private $username = "root";
-    private $password = "Mahjoub@123";
+    private $password = "1234";
     private $database = "location_voiture";
     private $connection;
 
@@ -17,7 +17,7 @@ class DatabaseConnection {
         if ($this->connection->connect_error) {
             die("Connection failed: " . $this->connection->connect_error);
         } else {
-            echo "Connection successful!";
+            // echo "Connection successful!";
         }
     }
 
