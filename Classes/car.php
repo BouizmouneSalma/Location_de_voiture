@@ -1,32 +1,38 @@
 <?php 
 
 // require_once ".././config/databasecnx.php";
-class voiture {
+class Car {
     private $cnx;
+
     public function __construct($cnx) {
     $this->cnx = $cnx;
     }
     // add car
-    public function addCar($Marque, $Modele, $Annee) {
-        $stmt = $this->cnx->prepare("INSERT INTO voiture (Marque, Modele, Annee) VALUES (?, ?, ?)");
-        return $stmt->execute([$Marque,$Modele ,$Annee ]);
+    public function addCar($NumImmatriculation, $Marque, $Modele, $Annee, $Image) {
+        $stmt = $this->cnx->prepare("INSERT INTO voiture (NumImmatriculation, Marque, Modele, Annee, Image) VALUES (?, ?, ?, ?, ?)");
+        return $stmt->execute([$NumImmatriculation, $Marque, $Modele, $Annee, $Image]);
     }
     
     // modify car
     public function updateCar($id, $Marque, $Modele, $Annee) {
-        $stmt = $this->cnx->prepare("UPDATE voiture SET Nom = ?, Adresse = ?, Tele = ? WHERE NumImmatriculation = ?");
-        return $stmt->execute([$Marque, $Annee,$Modele,  $id]);
+        $stmt = $this->cnx->prepare("UPDATE voiture SET NumImmatriculation = ?, Marque = ?, Modele = ? , Annee = ? , Image = ? WHERE NumImmatriculation = '$id'");
+        return $stmt->execute([$id,$Marque,$Modele,$Annee,$img]);
     }
     // delet car
-    public function deletevoiture($id) {
+    public function deleteCar($id) { 
         $stmt = $this->cnx->prepare("DELETE FROM voiture WHERE NumImmatriculation = ?");
         return $stmt->execute([$id]);
     }
     // get car by id
     public function getCarById($id) {
         $stmt = $this->cnx->prepare("SELECT * FROM voiture WHERE NumImmatriculation = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch_all(MYSQLI_ASSOC);
+        $stmt->bind_param("s", $id); 
+        if ($stmt->execute()) {
+            $stmt_result = $stmt->get_result(); 
+            $reslt = $stmt_result->fetch_all(MYSQLI_ASSOC); 
+        } 
+        return $reslt;
+       
     }
 
     // get all Car 
