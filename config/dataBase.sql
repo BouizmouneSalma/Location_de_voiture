@@ -2,20 +2,26 @@
 CREATE DATABASE location_voiture;
 USE location_voiture;
 
--- Table client
-CREATE TABLE client (
-    NumClient INT AUTO_INCREMENT PRIMARY KEY,
-    Nom VARCHAR(100) NOT NULL,
-    Adresse VARCHAR(255) NOT NULL,
-    Tele VARCHAR(15) NOT NULL
+-- Table user
+CREATE TABLE `user` (
+  `NumClient` int NOT NULL AUTO_INCREMENT,
+  `Nom` varchar(100) NOT NULL,
+  `Adresse` varchar(255) NOT NULL,
+  `Tele` varchar(15) NOT NULL,
+  `role` enum('admin','client') NOT NULL DEFAULT 'client',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`NumClient`)
 );
 
 -- Table voiture
-CREATE TABLE voiture (
-    NumImmatriculation VARCHAR(20) PRIMARY KEY,
-    Marque VARCHAR(50) NOT NULL,
-    Modele VARCHAR(50) NOT NULL,
-    Annee YEAR NOT NULL
+CREATE TABLE `voiture` (
+  `NumImmatriculation` varchar(20) NOT NULL,
+  `Marque` varchar(50) NOT NULL,
+  `Modele` varchar(50) NOT NULL,
+  `Annee` year NOT NULL,
+  `Image` text NOT NULL,
+  PRIMARY KEY (`NumImmatriculation`)
 );
 
 -- Table contrat
@@ -31,11 +37,3 @@ CREATE TABLE contrat (
     FOREIGN KEY (NumImmatriculation) REFERENCES voiture(NumImmatriculation)
 );
 
--- Table sign_up
-CREATE TABLE sign_up (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
