@@ -1,6 +1,6 @@
 <?php
  require_once '.././config/databasecnx.php';
- require_once '.././Classes/car.php';
+ require_once '.././Classes/Voiture.php';
  $db = new DatabaseConnection();
 $mysqli = $db->getConnection();
 $voiture = new Voiture($mysqli);
@@ -165,7 +165,8 @@ if(isset($_GET['NumEdit'])){
                                     <?php echo $voit['NumImmatriculation'] ?>
                                 </td>
                                 <td class="py-4 px-3">
-                                    <?php echo $voit['Image'] ?>
+                                    <img style="max-width:70px;max-higth:70px;" src=" <?php echo $voit['Image'] ?>"  alt="">
+                                   
                                 </td>        
                                 <td class="py-4 px-3">  <?php echo $voit['Marque'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $voit['Modele'] ?></td>
@@ -233,7 +234,7 @@ if(isset($_GET['NumEdit'])){
             </div>
             <div class="form-group flex flex-col">
             <label for="carImage" class="text-sm text-gray-700 mb-1">Car Image</label>
-          <input type="text" name="carImage" id="carImage" accept="image/*" class="p-2 border border-gray-300 rounded-lg outline-none text-sm">
+          <input type="text" name="carImage" id="carImage" accept="image/*" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Image'])) echo $val[0]['Image']?>">
        </div>
             <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="editveh">Edit</button>
             <button type="button" id="colseedit" class="close-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out">Close</button>
