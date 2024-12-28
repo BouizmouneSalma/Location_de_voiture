@@ -149,6 +149,7 @@ if(isset($_GET['NumEdit'])){
                         <thead>
                             <tr class="">
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Registration number</th>
+                                <th class="pb-3 px-3 text-sm text-left border-b border-grey">Image</th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Mark </th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Model </th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Year</th>
@@ -162,7 +163,10 @@ if(isset($_GET['NumEdit'])){
                              <tr>
                                 <td class="py-4 px-3">
                                     <?php echo $voit['NumImmatriculation'] ?>
-                                </td>      
+                                </td>
+                                <td class="py-4 px-3">
+                                    <?php echo $voit['Image'] ?>
+                                </td>        
                                 <td class="py-4 px-3">  <?php echo $voit['Marque'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $voit['Modele'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $voit['Annee'] ?></td>
@@ -180,7 +184,7 @@ if(isset($_GET['NumEdit'])){
  </main>
 </div>
 
-<div id="addClientForm" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[520px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
+<div id="addClientForm" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[580px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
         <form action=".././controllers/controlCar.php" method="post"  class="flex flex-col gap-4">
             <h2 class="text-2xl font-semibold  mb-5">Add Car</h2>
             <div class="form-group flex flex-col">
@@ -200,15 +204,15 @@ if(isset($_GET['NumEdit'])){
                 <input  type="number"   id="vehicleYear"   name="1"   min="2008"  max="2024"   required  placeholder="Enter the vehicle year" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" >
             </div>
             <div class="form-group flex flex-col">
-        <label for="carImage" class="text-sm text-gray-700 mb-1">Car Image</label>
-        <input type="file" name="carImage" id="carImage" accept="image/*" class="p-2 border border-gray-300 rounded-lg outline-none text-sm">
-    </div>
+            <label for="carImage" class="text-sm text-gray-700 mb-1">Car Image</label>
+          <input type="text" name="carImage" id="carImage" accept="image/*" class="p-2 border border-gray-300 rounded-lg outline-none text-sm">
+       </div>
             <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="Add" >Add</button>
             <button type="button" id="closeForm" class="close-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out">Close</button>
       </form>
 </div>
 
-<div id="editform" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[520px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
+<div id="editform" class="add-client-form fixed  right-[-100%] w-full max-w-[400px] h-[580px] shadow-[2px_0_10px_rgba(0,0,0,0.1)] p-6 flex flex-col gap-5 transition-all duration-700 ease-in-out z-50 top-[166px]">
 <form action=".././controllers/controlCar.php?Numedit=<?php echo $val[0]['NumImmatriculation'] ?>" method="post"  class="flex flex-col gap-4">
 <h2 class="text-2xl font-semibold  mb-5">Update Car</h2>
             <div class="form-group flex flex-col">
@@ -227,6 +231,10 @@ if(isset($_GET['NumEdit'])){
                 <label for="year" class="text-sm text-gray-700 mb-1">New Year</label>
                 <input  type="number"   id="vehicleYear"   name="vehYear"   min="2008"  max="2024"   required  placeholder="Enter the vehicle year" class="p-2 border border-gray-300 rounded-lg outline-none text-sm" value="<?php if(isset($val[0]['Annee'])) echo $val[0]['Annee']?>">
             </div>
+            <div class="form-group flex flex-col">
+            <label for="carImage" class="text-sm text-gray-700 mb-1">Car Image</label>
+          <input type="text" name="carImage" id="carImage" accept="image/*" class="p-2 border border-gray-300 rounded-lg outline-none text-sm">
+       </div>
             <button type="submit" class="submit-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out" name="editveh">Edit</button>
             <button type="button" id="colseedit" class="close-btn border-none px-4 py-2 rounded-lg cursor-pointer transition-all duration-500 ease-in-out">Close</button>
       </form>

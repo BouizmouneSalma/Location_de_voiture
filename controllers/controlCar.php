@@ -15,14 +15,6 @@ if (isset($_POST['Add'])) {
     $Annee = htmlspecialchars($_POST['1'] ?? '');
     $img = htmlspecialchars($_POST['carImage'] ?? '');
 
-    // Gestion des fichiers envoyés
-    if (isset($_FILES['carImage']) && $_FILES['carImage']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../uploads/';
-        $img = basename($_FILES['carImage']['name']);
-        $uploadPath = $uploadDir . $img;
-
-    }
-
     // Insertion dans la base de données
     try {
         $Car->addCar($NumImmatriculation, $Marque, $Modele, $Annee, $img);
@@ -40,9 +32,11 @@ if (isset($_POST['editveh'])) {
     $Marque = htmlspecialchars($_POST['Mark'] ?? '');
     $Modele = htmlspecialchars($_POST['Model'] ?? '');
     $Annee = htmlspecialchars($_POST['vehYear'] ?? '');
+    $img = htmlspecialchars($_POST['carImage'] ?? '');
+
 
     try {
-        $Car->updateCar($id, $Marque, $Modele, $Annee);
+        $Car->updateCar($id, $Marque, $Modele, $Annee,$img);
         header('Location: .././views/listCars.php');
         exit;
     } catch (Exception $e) {
