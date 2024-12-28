@@ -14,7 +14,7 @@ class Car {
     }
     
     // modify car
-    public function updateCar($id, $Marque, $Modele, $Annee) {
+    public function updateCar($id, $Marque, $Modele, $Annee,$img) {
         $stmt = $this->cnx->prepare("UPDATE voiture SET NumImmatriculation = ?, Marque = ?, Modele = ? , Annee = ? , Image = ? WHERE NumImmatriculation = '$id'");
         return $stmt->execute([$id,$Marque,$Modele,$Annee,$img]);
     }
