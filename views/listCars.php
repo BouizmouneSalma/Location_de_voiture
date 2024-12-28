@@ -3,7 +3,7 @@
  require_once '.././Classes/car.php';
  $db = new DatabaseConnection();
 $mysqli = $db->getConnection();
-$voiture = new Car($mysqli);
+$voiture = new Voiture($mysqli);
 // display data 
 
 $voitures = $voiture->getAllCars();
@@ -51,7 +51,7 @@ if(isset($_GET['NumEdit'])){
     </ul>
     <ul class="side-menu w-full mt-12">
             <li class="h-12 bg-transparent ml-2.5 rounded-l-full p-1">
-                <a href="../index.php" class="logout">
+            <a href=".././controllers/logout.php" class="logout">
                     <i class='bx bx-log-out-circle'></i> Logout
                 </a>
             </li>
