@@ -6,23 +6,23 @@ class Client {
     }
     // add client
     public function addClient($name, $phone, $address) {
-        $stmt = $this->cnx->prepare("INSERT INTO client (Nom, Adresse, Tele) VALUES (?, ?, ?)");
-        return $stmt->execute([$name,$address ,$phone ]);
+        $stmt = $this->cnx->prepare("INSERT INTO user (Nom, Adresse, Tele ,password) VALUES (?, ?, ?,?)");
+        return $stmt->execute([$name,$address ,$phone ,password_hash('admin',PASSWORD_DEFAULT)]);
     }
     
     // modify client
     public function updateClient($id, $name, $phone, $address) {
-        $stmt = $this->cnx->prepare("UPDATE client SET Nom = ?, Adresse = ?, Tele = ? WHERE NumClient = ?");
+        $stmt = $this->cnx->prepare("UPDATE user SET Nom = ?, Adresse = ?, Tele = ? WHERE NumClient = ?");
         return $stmt->execute([$name, $address,$phone,  $id]);
     }
     // delet client
     public function deleteClient($id) {
-        $stmt = $this->cnx->prepare("DELETE FROM client WHERE NumClient = ?");
+        $stmt = $this->cnx->prepare("DELETE FROM user WHERE NumClient = ?");
         return $stmt->execute([$id]);
     }
     // get client by id
     public function getClientById($id) {
-        $stmt = $this->cnx->prepare("SELECT * FROM client WHERE NumClient = ?");
+        $stmt = $this->cnx->prepare("SELECT * FROM user WHERE NumClient = ?");
         $stmt->bind_param("i", $id); // ربط المتغير مع الاستعلام
     
         if ($stmt->execute()) {
@@ -36,14 +36,14 @@ class Client {
 
     // get all client 
     public function getAllClients() {
-        $stmt = $this->cnx->query("SELECT * FROM client");
+        $stmt = $this->cnx->query("SELECT * FROM user");
         return $stmt->fetch_all(MYSQLI_ASSOC); 
     
     }
 
     // compteur number total clients
     public function getClientCount() {
-        $stmt = $this->cnx->query("SELECT COUNT(*) AS total_clients FROM client");
+        $stmt = $this->cnx->query("SELECT COUNT(*) AS total_clients FROM user");
         return $stmt->fetch_all(MYSQLI_ASSOC)['total_clients'];
     }
 }
