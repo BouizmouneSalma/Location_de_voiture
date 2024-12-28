@@ -1,11 +1,11 @@
 <?php
 require_once '.././config/databasecnx.php';
-require_once '.././Classes/Car.php';
+require_once '.././Classes/Voiture.php';
 
 // Initialisation des objets nécessaires
 $db = new DatabaseConnection();
 $connx = $db->getConnection();
-$Car = new Car($connx);
+$Car = new Voiture ($connx);
 
 // add voiture
 if (isset($_POST['Add'])) {
