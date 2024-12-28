@@ -1,5 +1,10 @@
 
 <?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: ./signup.php'); 
+    exit;
+}
 //  require_once './views/databasecnx.php';
 //  //for display data
 //  $clients = mysqli_query($cnx, "SELECT NumClient , Nom  FROM client");
@@ -79,7 +84,7 @@
     </ul>
     <ul class="side-menu w-full mt-12">
             <li class="h-12 bg-transparent ml-2.5 rounded-l-full p-1">
-            <a href="../index.php" class="logout">
+            <a href=".././controllers/logout.php" class="logout">
 
                     <i class='bx bx-log-out-circle'></i> Logout
                 </a>
@@ -291,7 +296,13 @@
       </form>
 </div> 
 
- 
+<script>
+        // Empêcher le retour arrière
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.pushState(null, null, location.href);
+        };
+    </script>
  <script src=".././assets/main.js"></script>
  
 </body>
