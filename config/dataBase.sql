@@ -21,6 +21,7 @@ CREATE TABLE `voiture` (
   `Modele` varchar(50) NOT NULL,
   `Annee` year NOT NULL,
   `Image` text NOT NULL,
+  avaliable ENUM('Available', 'Reserved') DEFAULT 'Available',
   PRIMARY KEY (`NumImmatriculation`)
 );
 
@@ -33,7 +34,9 @@ CREATE TABLE contrat (
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
     Duree INT NOT NULL,
-    FOREIGN KEY (NumClient) REFERENCES client(NumClient),
+    status ENUM('Confirm', 'Annulle', 'Pending') DEFAULT 'Pending',
+    FOREIGN KEY (NumClient) REFERENCES user(NumClient),
     FOREIGN KEY (NumImmatriculation) REFERENCES voiture(NumImmatriculation)
 );
-
+ALTER TABLE contrat
+DROP COLUMN Nom;
