@@ -32,11 +32,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['reserve'] )) {
     header('Location: ../index.php');
     
 }
-// //delet reservation
-// if( isset( $_GET['idcontrat'] )) {
-//     $Numcontr = $_GET['idcontrat'];
-//     $reslt = $contrat->deleteContrat( $Numcontr );
-//     header('Location: ../index.php');
+//delet reservation
+if( isset( $_GET['idcontrat'] )) {
+    $Numcontr = $_GET['idcontrat'];
+    $reslt = $contrat->deleteContrat( $Numcontr );
+    header('Location: ../index.php');
 
 // }
 // //update status confirm
