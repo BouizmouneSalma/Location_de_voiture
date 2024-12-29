@@ -54,5 +54,6 @@ if(isset( $_GET['NumContratIdanul'])) {
     header('Location: .././views/listContrat.php');
 
    }
+  
 
 ?>
