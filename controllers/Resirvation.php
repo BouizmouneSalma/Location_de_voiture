@@ -38,14 +38,14 @@ if( isset( $_GET['idcontrat'] )) {
     $reslt = $contrat->deleteContrat( $Numcontr );
     header('Location: ../index.php');
 
-// }
-// //update status confirm
-// if(isset( $_GET['NumContratId'] )) {
-//  $id = $_GET['NumContratId'];
-//  $stat = 'Confirm';
-//  $upd = $contrat->StatusContrat( $id , $stat );
-//  header('Location: ../index.php');
-// }
+}
+//update status confirm
+if(isset( $_GET['NumContratId'] )) {
+ $id = $_GET['NumContratId'];
+ $stat = 'Confirm';
+ $upd = $contrat->StatusContrat( $id , $stat );
+ header('Location: ../index.php');
+}
 // // update status cancel
 // if(isset( $_GET['NumContratIdanul'])&& isset($_POST['deleteres'])) {
 //     $id = $_GET['NumContratIdanul'];
