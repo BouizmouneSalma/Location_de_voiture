@@ -151,16 +151,19 @@ $contrat = $contra->getAllContrats();
                 <!-- </div> -->
     <?php } else { ?>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <?php foreach($voitures as $voit){?>
-        <?php //var_dump($voit)?>
+        <?php foreach($voitures as $voit){
+           
+           
+            ?>
+        
                     
             <!-- Available Car Card -->
             <div class="card rounded-2xl shadow-lg overflow-hidden">
                 <div class="relative">
                     <img src="<?php echo $voit['Image'] ?>" alt="Car" class="w-full h-56 object-cover">
                     <?php if( $voit['status'] === 'Confirm') {
-                         $voit['avaliable'] === 'Reserved';
-                        ?>
+                       $voit['avaliable'] === 'Reserved';
+                     ?>
                          <span class="reserved-badge absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 py-1.5 rounded-full font-semibold shadow-lg">
                          Reserved
                     </span>
@@ -227,6 +230,7 @@ $contrat = $contra->getAllContrats();
         <?php }?>
         </div>
     </div>
+    
 
     <!-- Reservations Page -->
     <div id="reservationsPage" class="page max-w-7xl mx-auto p-6">
