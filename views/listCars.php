@@ -153,6 +153,8 @@ if(isset($_GET['NumEdit'])){
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Mark </th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Model </th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Year</th>
+                                <th class="pb-3 px-3 text-sm text-left border-b border-grey">Reservation</th>
+
                                 <th class="pb-3 px-5 text-sm text-left border-b border-grey">Action</th>
                             </tr>
                         </thead>
@@ -171,6 +173,7 @@ if(isset($_GET['NumEdit'])){
                                 <td class="py-4 px-3">  <?php echo $voit['Marque'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $voit['Modele'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $voit['Annee'] ?></td>
+                                <td class="py-4 px-3">  <?php echo $voit['avaliable'] ?></td>
                                 <td class="py-4 px-3 edit-button" > 
                                 <a href="listCars.php?NumEdit=<?php echo $voit['NumImmatriculation']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
                                 <a href=".././controllers/controlCar.php?NumImmatriculation=<?php echo $voit['NumImmatriculation'] ?>"><i class="fa-solid fa-trash"></i></a></td>
