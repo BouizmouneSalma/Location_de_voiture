@@ -225,10 +225,7 @@ $contrats = $contr->getAllContrats();
                                  Confirm
                                  </span> </a>
                                  <?php }?>
-
                                       </td>
-                               
-
                             </tr>
                             <?php
                            }
