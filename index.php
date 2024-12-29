@@ -152,7 +152,7 @@ $contrat = $contra->getAllContrats();
     <?php } else { ?>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <?php foreach($voitures as $voit){?>
-        <?php var_dump($voit)?>
+        <?php //var_dump($voit)?>
                     
             <!-- Available Car Card -->
             <div class="card rounded-2xl shadow-lg overflow-hidden">
