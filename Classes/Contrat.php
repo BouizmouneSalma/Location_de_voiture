@@ -12,7 +12,7 @@ class Contrat {
         return $stmt->execute([$numClient, $numImmatriculation, $dateDebut, $dateFin, $duree]);
     }
 
-    // Modifier un contrat
+    // Modifier status un contrat
     public function StatusContrat($id,$stat) {
         $stmt = $this->cnx->prepare("UPDATE contrat SET status= ? WHERE NumContrat = ?");
         return $stmt->execute([$stat,$id]);
