@@ -37,10 +37,32 @@ class Voiture  {
 
     // get all Car 
     public function getAllCars() {
-        $stmt = $this->cnx->query("SELECT DISTINCT voiture.NumImmatriculation, voiture.*,contrat.NumContrat,contrat.NumClient, contrat.status, contrat.DateFin
-    FROM voiture
-    LEFT JOIN contrat ON voiture.NumImmatriculation = contrat.NumImmatriculation
-    WHERE contrat.status IS NULL OR contrat.status != 'Confirm'
+        $stmt = $this->cnx->query("SELECT 
+    voiture.NumImmatriculation, 
+    voiture.Marque, 
+    voiture.Modele, 
+    voiture.Annee, 
+    voiture.Image, 
+    voiture.avaliable, 
+    contrat.NumContrat, 
+    contrat.NumClient, 
+    contrat.status, 
+    contrat.DateFin
+FROM voiture
+LEFT JOIN (
+    SELECT 
+        NumImmatriculation, 
+        NumContrat, 
+        NumClient, 
+        status, 
+        DateFin
+    FROM contrat
+    WHERE (NumImmatriculation, DateFin) IN (
+        SELECT NumImmatriculation, MAX(DateFin)
+        FROM contrat
+        GROUP BY NumImmatriculation
+    )
+) AS contrat ON voiture.NumImmatriculation = contrat.NumImmatriculation;
 ");
         return $stmt->fetch_all(MYSQLI_ASSOC); 
     
