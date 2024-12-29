@@ -44,14 +44,15 @@ if(isset( $_GET['NumContratId'] )) {
  $id = $_GET['NumContratId'];
  $stat = 'Confirm';
  $upd = $contrat->StatusContrat( $id , $stat );
- header('Location: ../index.php');
+ header('Location: .././views/listContrat.php');
 }
 // update status cancel
-if(isset( $_GET['NumContratIdanul'])&& isset($_POST['deleteres'])) {
+if(isset( $_GET['NumContratIdanul'])) {
     $id = $_GET['NumContratIdanul'];
     $stat = 'Annulle';
     $upd = $contrat->StatusContrat( $id , $stat );
-    header('Location: ../index.php');
+    header('Location: .././views/listContrat.php');
+
    }
 
 ?>
