@@ -4,6 +4,18 @@ if (!isset($_SESSION['user'])) {
     header('Location: ./views/signup.php'); 
     exit;
 }
+require_once './config/databasecnx.php';
+require_once './Classes/Voiture.php';
+require_once './Classes/Contrat.php';
+
+
+$db = new DatabaseConnection();
+$mysqli = $db->getConnection();
+$contra = new Contrat($mysqli);
+$voiture = new Voiture($mysqli);
+$voitures = $voiture->getAllCars();
+// display data 
+$contrat = $contra->getAllContrats();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,10 +94,11 @@ if (!isset($_SESSION['user'])) {
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
+
 </head>
-<body>
+<body style=" scroll-behavior: smooth;">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
+    <nav class="bg-white shadow-lg fixed z-50 w-full">
         <div class="max-w-7xl mx-auto px-8 py-6">
             <div class="flex justify-between items-center">
                 <!-- Enhanced Logo -->
@@ -111,10 +124,6 @@ if (!isset($_SESSION['user'])) {
                     </div>
                     
                     <div class="flex items-center space-x-6">
-                        <button class="relative">
-                            <i class="fa-solid fa-bell text-xl text-gray-600 hover:text-blue-800 transition-colors"></i>
-                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">3</span>
-                        </button>
                         <a href="./controllers/logout.php"><button class="bg-black hover:bg-gray-800 text-white px-6 py-2.5 rounded-full transition-colors duration-300 flex items-center space-x-2">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             <span>Logout</span>
@@ -126,91 +135,169 @@ if (!isset($_SESSION['user'])) {
     </nav>
 
     <!-- Cars Page -->
-    <div id="carsPage" class="page active max-w-7xl mx-auto p-6">
+    <div id="carsPage" class="page active max-w-7xl mx-auto p-6  " style="transform: translateY(100px);">
+    <?php if (empty($voitures)){?>
+        <div class="flex flex-col items-center justify-center p-8 text-center">
+                    <div class="animate-bounce">
+                        <i data-feather="car" class="w-16 h-16 text-red-500"></i>
+                    </div>
+                    <h2 class="mt-4 text-2xl font-bold text-gray-800">
+                        No Cars Available
+                    </h2>
+                    <p class="mt-2 text-gray-600">
+                        There are currently no cars in the inventory.
+                        Please check back later.
+                    </p>
+                <!-- </div> -->
+    <?php } else { ?>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <?php foreach($voitures as $voit){?>
+        <?php var_dump($voit)?>
+                    
             <!-- Available Car Card -->
             <div class="card rounded-2xl shadow-lg overflow-hidden">
                 <div class="relative">
-                    <img src="https://www.cartecgroup.com/app/uploads/sites/4/2024/06/1719391246VEHICLE-VIEW-030-X5-xDrive50e-1719391167805.png" alt="Car" class="w-full h-56 object-cover">
-                    <span class="absolute top-4 right-4 bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-1.5 rounded-full font-semibold shadow-lg">
-                        Available
+                    <img src="<?php echo $voit['Image'] ?>" alt="Car" class="w-full h-56 object-cover">
+                    <?php if( $voit['status'] === 'Confirm') {
+                         $voit['avaliable'] === 'Reserved';
+                        ?>
+                         <span class="reserved-badge absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 py-1.5 rounded-full font-semibold shadow-lg">
+                         Reserved
                     </span>
+                    <?php }else{?>
+                    <span class="absolute top-4 right-4 bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-1.5 rounded-full font-semibold shadow-lg">
+                    <?php echo $voit['avaliable'] ?>
+                    </span>
+                    <?php }?>
+
                 </div>
                 <div class="p-6 space-y-4">
-                    <h3 class="font-bold text-2xl text-gray-800">Mercedes C200</h3>
+                    <h3 class="font-bold text-2xl text-gray-800"><?php echo $voit['Modele'] ?></h3>
                     <div class="flex items-center gap-6 text-gray-600">
-                        <span class="flex items-center"><i class="fa-solid fa-car-side mr-2"></i>MAT-1234</span>
-                        <span class="flex items-center"><i class="fa-solid fa-gauge mr-2"></i>2023</span>
+                        <span class="flex items-center"><i class="fa-solid fa-car-side mr-2"></i><?php echo $voit['NumImmatriculation']; ?></span>
+                        <span class="flex items-center"><i class="fa-solid fa-gauge mr-2"></i><?php echo $voit['Annee'] ?></span>
                     </div>
+                    <?php if($voit['status'] === 'Confirm') {?>
+
+                        <div class="text-orange-500 text-center font-medium bg-orange-50 p-3 rounded-lg">
+                        <i class="fa-solid fa-clock-rotate-left mr-2"></i>
+                        Reserved until <?php echo $voit['DateFin'] ?>
+                    </div>
+                    <?php }else{?>
+
+                    <form method="post" action="./controllers/Resirvation.php">
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="relative">
+                        <div class="relative mb-3">
                             <i class="fa-regular fa-calendar absolute left-3 top-3 text-blue-600"></i>
-                            <input type="date" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none">
+                            <input type="date" name="datestart" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none">
                         </div>
-                        <div class="relative">
+                        <div class="relative mb-3">
                             <i class="fa-regular fa-calendar-check absolute left-3 top-3 text-blue-600"></i>
-                            <input type="date" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none">
+                            <input type="date" name="dataefin" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none">
                         </div>
                     </div>
-                    <button class="reserve-btn w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all duration-300 font-semibold shadow-md">
+                    
+                    <input type="hidden" name="NumImmatriculation" value="<?php echo $voit['NumImmatriculation']; ?>">
+                             <?php if( isset($voit['status'])) {?>
+                     <?php if($_SESSION['user']['NumClient'] == $voit['NumClient']) {?>
+                            
+                   <div  name="deleteres" class="text-yellow-500 hover:text-red-600 font-medium transition-colors flex items-center">       
+                        Check your Reservation Page
+                    </div>
+               <?php }else{?>
+                    <button type="submit" name="reserve" class="reserve-btn w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all duration-300 font-semibold shadow-md">
                         Reserve Now
                     </button>
-                </div>
-            </div>
+                 
+              
+                    <?php }?>
+               <?php }else{?>
 
-            <!-- Reserved Car Card -->
-            <div class="card rounded-2xl shadow-lg overflow-hidden opacity-90">
-                <div class="relative">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSykPMU-x81h7S8f35onUHOrDES2cl_4mDW3w&s" alt="Car" class="w-full h-56 object-cover">
-                    <span class="reserved-badge absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 py-1.5 rounded-full font-semibold shadow-lg">
-                        Reserved
-                    </span>
-                </div>
-                <div class="p-6 space-y-4">
-                    <h3 class="font-bold text-2xl text-gray-800">BMW X5</h3>
-                    <div class="flex items-center gap-6 text-gray-600">
-                        <span class="flex items-center"><i class="fa-solid fa-car-side mr-2"></i>MAT-5678</span>
-                        <span class="flex items-center"><i class="fa-solid fa-gauge mr-2"></i>2024</span>
-                    </div>
-                    <div class="text-orange-500 text-center font-medium bg-orange-50 p-3 rounded-lg">
-                        <i class="fa-solid fa-clock-rotate-left mr-2"></i>
-                        Reserved until 25/12/2024
-                    </div>
+                    <button type="submit" name="reserve" class="reserve-btn w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all duration-300 font-semibold shadow-md">
+                        Reserve Now
+                    </button>
+                    <?php } ?>
+                    </form>
+                  
+                  <?php } ?>
                 </div>
             </div>
+        <?php }?>
+            
+        <?php }?>
         </div>
     </div>
 
     <!-- Reservations Page -->
     <div id="reservationsPage" class="page max-w-7xl mx-auto p-6">
         <h2 class="text-3xl font-bold mb-8 text-gray-800">My Reservations</h2>
-        <div class="space-y-6">
+        <?php if (empty($contrat)){?>
+        <div class="flex flex-col items-center justify-center p-8 text-center">
+                    <div class="animate-bounce">
+                        <i data-feather="car" class="w-16 h-16 text-red-500"></i>
+                    </div>
+                    <h2 class="mt-4 text-2xl font-bold text-gray-800">
+                        No Cars Reserved
+                    </h2>
+                    <p class="mt-2 text-gray-600">
+                        Chose Cars to reserved 
+                    </p>
+                <!-- </div> -->
+    <?php } else { ?>
+        <?php foreach($contrat as $cont){?>
+            <?php if($_SESSION['user']['NumClient'] == $cont['NumClient']) {?>
+          
+        <div class="space-y-6  mb-5" style="transform:translateY(50px);">
             <!-- Pending Reservation -->
             <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-6">
-                        <img src="https://www.cartecgroup.com/app/uploads/sites/4/2024/06/1719391246VEHICLE-VIEW-030-X5-xDrive50e-1719391167805.png" alt="Car" class="rounded-xl shadow-md max-w[150px] max-h-[150px]">
+                        <img src="<?php echo $cont['image']?>" alt="Car" class="rounded-xl shadow-md max-w[150px] max-h-[150px]">
                         <div class="space-y-2">
-                            <h3 class="font-bold text-xl text-gray-800">Mercedes C200</h3>
-                            <p class="text-gray-600 flex items-center"><i class="fa-solid fa-car-side mr-2"></i>MAT-1234</p>
+                            <h3 class="font-bold text-xl text-gray-800"><?php echo $cont['Modele']?></h3>
+                            <p class="text-gray-600 flex items-center"><i class="fa-solid fa-car-side mr-2"></i><?php echo $cont['NumImmatriculation']?></p>
                             <div class="text-gray-500 flex items-center">
                                 <i class="fa-regular fa-calendar mr-2"></i>
-                                23/12/2024 - 25/12/2024
+                                <?php echo $cont['DateDebut']?> - <?php echo $cont['DateFin']?>
                             </div>
+                        <div class="text-gray-500 flex items-center"><i class="fa-regular fa-calendar-days mr-2"></i><?php echo $cont['Duree']?> Days</div> 
+
                         </div>
                     </div>
+
                     <div class="flex flex-col items-end space-y-4">
-                        <span class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-4 py-1.5 rounded-full font-semibold shadow-md">
-                            Pending
+                        <?php if($cont['status'] === 'Confirm') {?>
+                        <span class="reserved-badge bg-gradient-to-r from-green-400 to-green-500 text-white px-4 py-1.5 rounded-full font-semibold shadow-md">
+                        Confirmed <i class="fa-solid fa-check"></i>
                         </span>
-                        <button class="text-red-500 hover:text-red-600 font-medium transition-colors flex items-center">
+                        <?php }else
+                             if($cont['status'] === 'Annulle') {?>
+                            <span class="reserved-badge bg-gradient-to-r from-red-400 to-red-500 text-white px-4 py-1.5 rounded-full font-semibold shadow-md">
+                              Canceled <i class="fa-solid fa-ban"></i>
+                        </span>
+                        <?php }else{?>
+                            <span class="reserved-badge bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-4 py-1.5 rounded-full font-semibold shadow-md">
+                        Pending <i class="fa-solid fa-spinner"></i>
+                        </span>
+                        <form method="post" action="./controllers/Resirvation.php?idcontrat=<?php echo $cont['NumContrat']?>">
+                        <button type="submit" name="deleteres" class="text-red-500 hover:text-red-600 font-medium transition-colors flex items-center">
                             <i class="fa-solid fa-times mr-2"></i>
                             Cancel Reservation
                         </button>
+                        </form>
+                        <?php } ?>
+                       
+                        
+                      
                     </div>
                 </div>
             </div>
         </div>
+    <?php } else { ?>
+
+        <?php }?>
+        <?php }?>
+        <?php }?>
     </div>
 
     <script>
