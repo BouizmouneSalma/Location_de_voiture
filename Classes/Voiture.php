@@ -37,7 +37,11 @@ class Voiture  {
 
     // get all Car 
     public function getAllCars() {
-        $stmt = $this->cnx->query("SELECT * FROM voiture");
+        $stmt = $this->cnx->query("SELECT DISTINCT voiture.NumImmatriculation, voiture.*,contrat.NumContrat,contrat.NumClient, contrat.status, contrat.DateFin
+    FROM voiture
+    LEFT JOIN contrat ON voiture.NumImmatriculation = contrat.NumImmatriculation
+    WHERE contrat.status IS NULL OR contrat.status != 'Confirm'
+");
         return $stmt->fetch_all(MYSQLI_ASSOC); 
     
     }
