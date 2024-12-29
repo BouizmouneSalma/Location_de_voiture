@@ -5,6 +5,14 @@ if (!isset($_SESSION['user'])) {
     header('Location: ./signup.php'); 
     exit;
 }
+require_once '.././config/databasecnx.php';
+require_once '.././Classes/Contrat.php';
+$db = new DatabaseConnection();
+$mysqli = $db->getConnection();
+$contr = new Contrat($mysqli);
+// display data 
+$contrats = $contr->getAllContrats();
+
 //  require_once './views/databasecnx.php';
 //  //for display data
 //  $clients = mysqli_query($cnx, "SELECT NumClient , Nom  FROM client");
@@ -141,7 +149,7 @@ if (!isset($_SESSION['user'])) {
                     <span class="info">
                         <h3>
                             <?php
-                            echo $result['total_clients'];
+                            //echo $result['total_clients'];
                             ?>
                         </h3>
                         <p>Clients</p>
@@ -151,7 +159,7 @@ if (!isset($_SESSION['user'])) {
                     <span class="info">
                         <h3>
                         <?php
-                            echo $resultv['total_voitures'];
+                            //echo $resultv['total_voitures'];
                             ?>
                         </h3>
                         <p>Cars</p>
@@ -161,7 +169,7 @@ if (!isset($_SESSION['user'])) {
                     <span class="info">
                         <h3>
                         <?php
-                            echo $resultc['total_contrats'];
+                            //echo $resultc['total_contrats'];
                         ?>
                         </h3>
                         <p>Contrats</p>
@@ -187,13 +195,13 @@ if (!isset($_SESSION['user'])) {
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">DateDebut</th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">DateFin</th>
                                 <th class="pb-3 px-3 text-sm text-left border-b border-grey">Duree</th>
-                                <th class="pb-3 px-5 text-sm text-left border-b border-grey">Print Contrat</th>
+                                <th class="pb-3 px-5 text-sm text-left border-b border-grey">Status</th>
                                 <th class="pb-3 px-5 text-sm text-left border-b border-grey">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                            <?php
-                           foreach($contrat  as $cont){
+                           foreach($contrats  as $cont){
                             ?>
                              <tr>
                                 <td class="py-4 px-3">
@@ -204,10 +212,21 @@ if (!isset($_SESSION['user'])) {
                                 <td class="py-4 px-3">  <?php echo $cont['DateDebut'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $cont['DateFin'] ?></td>
                                 <td class="py-4 px-3">  <?php echo $cont['Duree'] ?> Days</td>
-                                <td class="py-4 px-10 edit-button"><button type="button" onclick="window.print()" class="edit-btn flex justify-around items-center gap-2 "><i class="fa-solid fa-print"></i> <P>Print</P></button></td> 
+                                <td class="py-4 px-3"><?php echo $cont['status'] ?></td> 
                                 <td class="py-4 px-3 edit-button"> 
-                                <a href="contrats.php?NumContratId=<?php echo $cont['NumContrat']; ?>" class="edit-btn"><i class='bx bx-edit-alt'></i>  </a>
-                                <a href="contrats.php?NumClientcontrat= <?php echo $cont['NumContrat'] ?>"><i class="fa-solid fa-trash"></i></a></td>
+                                    <?php if($cont['status'] === 'Confirm' ) {?>
+                                 <a href=".././controllers/Resirvation.php?NumContratIdanul=<?php echo $cont['NumContrat']; ?>" class="edit-btn">
+                                <span class="reserved-badge bg-gradient-to-r from-red-400 to-red-500 text-white px-4 py-1.5 rounded-full font-semibold shadow-md">
+                                 Annulle
+                                 </span> </a>
+                                 <?php }else{?>
+                                    <a href=".././controllers/Resirvation.php?NumContratId=<?php echo $cont['NumContrat']; ?>" class="edit-btn">
+                                <span class="reserved-badge bg-gradient-to-r from-green-400 to-green-500 text-white px-4 py-1.5 rounded-full font-semibold shadow-md">
+                                 Confirm
+                                 </span> </a>
+                                 <?php }?>
+
+                                      </td>
                                
 
                             </tr>
